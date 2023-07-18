@@ -1,4 +1,4 @@
-#!/bin/sh
+/bin/bash
 
 # Specify the MAC address patterns to match (first 6 characters) and their corresponding names
 MAC_PATTERN1="f8:d9:b8"
