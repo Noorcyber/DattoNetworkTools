@@ -1,4 +1,4 @@
-/bin/bash
+#!/bin/sh
 
 # Specify the MAC address patterns to match (first 6 characters) and their corresponding names
 MAC_PATTERN1="f8:d9:b8"
@@ -7,7 +7,7 @@ MAC_NAME1="Datto Devices"
 MAC_NAME2="Vendor 2 Devices"
 
 # Specify the MAC address patterns for Tuya Devices
-TUYA_MAC_PATTERNS=("10:5a:17" "10:d5:61" "18:69:d8" "1c:90:ff" "38:1f:8d" "50:8a:06" "68:57:2d" "70:89:76" "7c:f6:66" "84:e3:42" "a0:92:08" "cc:8c:bf" "d4:a6:51" "d8:1f:12" "fc:67:1f")
+TUYA_MAC_PATTERNS="10:5a:17 10:d5:61 18:69:d8 1c:90:ff 38:1f:8d 50:8a:06 68:57:2d 70:89:76 7c:f6:66 84:e3:42 a0:92:08 cc:8c:bf d4:a6:51 d8:1f:12 fc:67:1f"
 TUYA_MAC_NAME="Tuya Devices"
 
 # Retrieve the ARP table
@@ -37,7 +37,7 @@ do
     VENDOR_NAME="$MAC_NAME1"
   fi
   
-  for TUYA_MAC_PATTERN in "${TUYA_MAC_PATTERNS[@]}"; do
+  for TUYA_MAC_PATTERN in $TUYA_MAC_PATTERNS; do
     if [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN" ]; then
       MATCHED="Matched"
       VENDOR_NAME="$TUYA_MAC_NAME"
