@@ -28,7 +28,7 @@ TUYA_MAC_NAME="Tuya Devices"
 ARP_TABLE=$(cat /proc/net/arp)
 
 # Print the custom column headers
-printf "----------------------Simp Tool V1------------------------\n"
+printf "----------------------Simp Tool V1-----------------------\n"
 printf "%-15s %-17s %-12s %-15s\n" "IP Address" "HW Address" "Link" "Vendor"
 printf "---------------------------------------------------------\n"
 
