@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Specify the MAC address patterns to match (first 6 characters) and their corresponding names
 MAC_PATTERN1="f8:d9:b8"
@@ -15,7 +15,7 @@ ARP_TABLE=$(cat /proc/net/arp)
 
 # Print the custom column headers
 printf "----------------------Simp Tool V1------------------------\n"
-printf "%-15s %-17s %-12s %-15s\n" "IP Address" "HW Address" "Link" "Vendor"
+printf "%-15s %-17s %-12s %-15s\n" "IP Address" "HW Address" "Device" "Vendor"
 printf "---------------------------------------------------------\n"
 
 # Iterate over each line in the ARP table
