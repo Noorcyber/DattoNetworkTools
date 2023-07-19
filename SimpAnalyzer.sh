@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Specify the URL of the MAC-to-vendor TXT file
-MAC_VENDOR_URL="https://raw.githubusercontent.com/DattoCorn/DattoNetworkTools/main/VendorList.txt"
+MAC_VENDOR_URL=$(cat /tmp/VendorList.txt)
 
 # Retrieve the MAC-to-vendor mapping from the TXT file
 curl -s "$MAC_VENDOR_URL" -o mac_vendors.txt
