@@ -1,17 +1,17 @@
-10:5a:17 Tuya Devices
-10:d5:61 Tuya Devices
-18:69:d8 Tuya Devices
-1c:90:ff Tuya Devices
-38:1f:8d Tuya Devices
-50:8a:06 Tuya Devices
-68:57:2d Tuya Devices
-70:89:76 Tuya Devices
-7c:f6:66 Tuya Devices
-84:e3:42 Tuya Devices
-a0:92:08 Tuya Devices
-cc:8c:bf Tuya Devices
-d4:a6:51 Tuya Devices
-d8:1f:12 Tuya Devices
-fc:67:1f Tuya Devices
-f8:d9:b8 Datto Devices
-ac:86:74 Datto Devices
+10:5a:17,Tuya Devices
+10:d5:61,Tuya Devices
+18:69:d8,Tuya Devices
+1c:90:ff,Tuya Devices
+38:1f:8d,Tuya Devices
+50:8a:06,Tuya Devices
+68:57:2d,Tuya Devices
+70:89:76,Tuya Devices
+7c:f6:66,Tuya Devices
+84:e3:42,Tuya Devices
+a0:92:08,Tuya Devices
+cc:8c:bf,Tuya Devices
+d4:a6:51,Tuya Devices
+d8:1f:12,Tuya Devices
+fc:67:1f,Tuya Devices
+f8:d9:b8,Datto Devices
+ac:86:74,Datto Devices
