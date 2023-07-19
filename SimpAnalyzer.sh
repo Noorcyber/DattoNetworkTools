@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Specify the MAC address patterns to match (first 6 characters) and their corresponding names
 MAC_PATTERN1="f8:d9:b8"
@@ -7,21 +7,7 @@ MAC_NAME1="Datto Devices"
 MAC_NAME2="Vendor 2 Devices"
 
 # Specify the MAC address patterns for Tuya Devices
-TUYA_MAC_PATTERN1="10:5a:17"
-TUYA_MAC_PATTERN2="10:d5:61"
-TUYA_MAC_PATTERN3="18:69:d8"
-TUYA_MAC_PATTERN4="1c:90:ff"
-TUYA_MAC_PATTERN5="38:1f:8d"
-TUYA_MAC_PATTERN6="50:8a:06"
-TUYA_MAC_PATTERN7="68:57:2d"
-TUYA_MAC_PATTERN8="70:89:76"
-TUYA_MAC_PATTERN9="7c:f6:66"
-TUYA_MAC_PATTERN10="84:e3:42"
-TUYA_MAC_PATTERN11="a0:92:08"
-TUYA_MAC_PATTERN12="cc:8c:bf"
-TUYA_MAC_PATTERN13="d4:a6:51"
-TUYA_MAC_PATTERN14="d8:1f:12"
-TUYA_MAC_PATTERN15="fc:67:1f"
+TUYA_MAC_PATTERNS=("10:5a:17" "10:d5:61" "18:69:d8" "1c:90:ff" "38:1f:8d" "50:8a:06" "68:57:2d" "70:89:76" "7c:f6:66" "84:e3:42" "a0:92:08" "cc:8c:bf" "d4:a6:51" "d8:1f:12" "fc:67:1f")
 TUYA_MAC_NAME="Tuya Devices"
 
 # Retrieve the ARP table
@@ -51,17 +37,13 @@ do
     VENDOR_NAME="$MAC_NAME1"
   fi
   
-  if [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN1" ] || [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN2" ] || \
-     [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN3" ] || [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN4" ] || \
-     [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN5" ] || [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN6" ] || \
-     [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN7" ] || [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN8" ] || \
-     [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN9" ] || [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN10" ] || \
-     [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN11" ] || [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN12" ] || \
-     [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN13" ] || [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN14" ] || \
-     [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN15" ]; then
-    MATCHED="Matched"
-    VENDOR_NAME="$TUYA_MAC_NAME"
-  fi
+  for TUYA_MAC_PATTERN in "${TUYA_MAC_PATTERNS[@]}"; do
+    if [ "$MAC_PREFIX" = "$TUYA_MAC_PATTERN" ]; then
+      MATCHED="Matched"
+      VENDOR_NAME="$TUYA_MAC_NAME"
+      break
+    fi
+  done
   
   # Output the custom formatted information for matched MAC address prefixes
   printf "%-15s %-17s %-12s %-15s\n" "$IP_ADDRESS" "$MAC_ADDRESS" "$DEVICE" "$VENDOR_NAME"
