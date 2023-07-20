@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "Datto Networking LTE Tool V1.2"
+echo "Datto Networking LTE Tool V1.3"
 
 # Function to echo and then run a command
 run_cmd() {
@@ -25,7 +25,7 @@ if run_cmd "ping -I lte0 8.8.8.8 -c 3"; then
 fi
 
 # Step 3
-run_cmd "lsusb"
+run_cmd "lsusb -t"
 
 # Step 4
 run_cmd "modemreboot"
