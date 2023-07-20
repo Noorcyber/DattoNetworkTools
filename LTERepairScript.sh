@@ -40,8 +40,11 @@ fi
 
 # Step 7
 model=$(cat /etc/datto/model)
+echo "Debug: Model: $model"
 if [ "$model" = "VZ5" ] || [ "$model" = "VZ6" ]; then
     run_cmd "sequans-gpio-reset"
+else
+    echo "Debug: Skipping sequans-gpio-reset"
 fi
 
 # Step 8
