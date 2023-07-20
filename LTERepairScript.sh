@@ -18,50 +18,60 @@ run_cmd() {
 run_cmd "modemstatus --verbose"
 
 # Step 2
-run_cmd "ping -I lte0 8.8.8.8 -c 3"
+if run_cmd "ping -I lte0 8.8.8.8 -c 3"; then
+    echo "LTE is working. Exiting script."
+    exit 0
+fi
 
-# Steps 3, 4, and 5
+# Step 3
 run_cmd "lsusb"
+
+# Step 4
 run_cmd "modemreboot"
+
+# Step 5
 run_cmd "modemreconnect"
 
 # Step 6
-run_cmd "ping -I lte0 8.8.8.8 -c 3"
+if run_cmd "ping -I lte0 8.8.8.8 -c 3"; then
+    echo "LTE is working after modem reconnect. Exiting script."
+    exit 0
+fi
 
-echo "Debug: Exit status of ping: $?"
+# Step 7
+model=$(cat /etc/datto/model)
+if [ "$model" = "VZ5" ] || [ "$model" = "VZ6" ]; then
+    run_cmd "sequans-gpio-reset"
+fi
 
-if [ $? -ne 0 ]; then
-    # Step 7
-    model=$(cat /etc/datto/model)
-    echo "Debug: Model: $model"
-    if [ "$model" = "VZ5" ] || [ "$model" = "VZ6" ]; then
-        run_cmd "sequans-gpio-reset"
-    else
-        echo "Debug: Skipping sequans-gpio-reset"
-    fi
+# Step 8
+run_cmd "modemreconnect"
 
-    # Step 8
-    run_cmd "modemreconnect"
+# Step 9
+if run_cmd "ping -I lte0 8.8.8.8 -c 3"; then
+    echo "LTE is working after sequans-gpio-reset. Exiting script."
+    exit 0
+fi
 
-    # Step 9
-    run_cmd "ping -I lte0 8.8.8.8 -c 3"
+# Step 10
+run_cmd "/etc/init.d/dna-modemmanager stop"
 
-    if [ $? -ne 0 ]; then
-        # Step 10
-        run_cmd "/etc/init.d/dna-modemmanager stop"
+# Step 11
+echo "Running: pymm"
+pymm &
+sleep 60
+kill $!
+echo "pymm - Completed"
+echo "----------------------------------------------------"
 
-        # Step 11
-        echo "Running: pymm"
-        pymm &
-        sleep 60
-        kill $!
-        echo "pymm - Completed"
-        echo "----------------------------------------------------"
+# Step 12
+run_cmd "/etc/init.d/dna-modemmanager start"
 
-        # Step 12
-        run_cmd "/etc/init.d/dna-modemmanager start"
-
-        # Step 13
-        run_cmd "ping -I lte0 8.8.8.8 -c 3"
-    fi
+# Step 13
+if run_cmd "ping -I lte0 8.8.8.8 -c 3"; then
+    echo "LTE is working after dna-modemmanager restart. Exiting script."
+    exit 0
+else
+    echo "LTE still not working. Please check the device."
+    exit 1
 fi
