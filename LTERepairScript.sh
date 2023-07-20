@@ -13,7 +13,7 @@ run_cmd() {
 }
 
 # Step 1
-run_cmd "modem --verbose"
+run_cmd "modemstatus --verbose"
 
 if [ $? -ne 0 ]; then
     # Step 2
