@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "Datto Networking LTE Tool V1.3"
+echo "Datto Networking LTE Tool V1.5"
 
 # Function to echo and then run a command
 run_cmd() {
