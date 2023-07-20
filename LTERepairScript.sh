@@ -1,51 +1,64 @@
 #!/bin/sh
 
+# Function to echo and then run a command
+run_cmd() {
+    echo "Running: $1"
+    eval $1
+    if [ $? -eq 0 ]; then
+        echo "$1 - Success"
+    else
+        echo "$1 - Failed"
+    fi
+    echo "----------------------------------------------------"
+}
+
 # Step 1
-modem --verbose
+run_cmd "modem --verbose"
+
 if [ $? -ne 0 ]; then
     # Step 2
-    ping -I lte0 8.8.8.8 -c 3
+    run_cmd "ping -I lte0 8.8.8.8 -c 3"
+    
     if [ $? -ne 0 ]; then
-        # Step 3, 4 and 5
-        lsusb
-        modemreboot
-        modemreconnect
+        # Steps 3, 4, and 5
+        run_cmd "lsusb"
+        run_cmd "modemreboot"
+        run_cmd "modemreconnect"
 
         # Step 6
-        ping -I lte0 8.8.8.8 -c 3
+        run_cmd "ping -I lte0 8.8.8.8 -c 3"
+        
         if [ $? -ne 0 ]; then
             # Step 7
             model=$(cat /etc/datto/model)
             if [ "$model" = "VZ5" ] || [ "$model" = "VZ6" ]; then
-                sequans-gpio-reset
+                run_cmd "sequans-gpio-reset"
             fi
 
             # Step 8
-            modemreconnect
+            run_cmd "modemreconnect"
 
             # Step 9
-            ping -I lte0 8.8.8.8 -c 3
+            run_cmd "ping -I lte0 8.8.8.8 -c 3"
+            
             if [ $? -ne 0 ]; then
                 # Step 10
-                /etc/init.d/dna-modemmanager stop
+                run_cmd "/etc/init.d/dna-modemmanager stop"
 
                 # Step 11
+                echo "Running: pymm"
                 pymm &
                 sleep 60
                 kill $!
+                echo "pymm - Completed"
+                echo "----------------------------------------------------"
 
                 # Step 12
-                /etc/init.d/dna-modemmanager start
+                run_cmd "/etc/init.d/dna-modemmanager start"
 
                 # Step 13
-                ping -I lte0 8.8.8.8 -c 3
-                if [ $? -ne 0 ]; then
-                    echo "Ping failed"
-                else
-                    echo "Ping succeeded"
-                fi
+                run_cmd "ping -I lte0 8.8.8.8 -c 3"
             fi
         fi
     fi
 fi
-
