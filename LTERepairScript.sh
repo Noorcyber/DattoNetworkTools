@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Step 1
-modemstatus --verbose
+modem --verbose
 if [ $? -ne 0 ]; then
     # Step 2
     ping -I lte0 8.8.8.8 -c 3
