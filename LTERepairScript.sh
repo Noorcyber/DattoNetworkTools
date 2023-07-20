@@ -20,45 +20,48 @@ run_cmd "modemstatus --verbose"
 # Step 2
 run_cmd "ping -I lte0 8.8.8.8 -c 3"
 
+# Steps 3, 4, and 5
+run_cmd "lsusb"
+run_cmd "modemreboot"
+run_cmd "modemreconnect"
+
+# Step 6
+run_cmd "ping -I lte0 8.8.8.8 -c 3"
+
+echo "Debug: Exit status of ping: $?"
+
 if [ $? -ne 0 ]; then
-    # Steps 3, 4, and 5
-    run_cmd "lsusb"
-    run_cmd "modemreboot"
+    # Step 7
+    model=$(cat /etc/datto/model)
+    echo "Debug: Model: $model"
+    if [ "$model" = "VZ5" ] || [ "$model" = "VZ6" ]; then
+        run_cmd "sequans-gpio-reset"
+    else
+        echo "Debug: Skipping sequans-gpio-reset"
+    fi
+
+    # Step 8
     run_cmd "modemreconnect"
 
-    # Step 6
+    # Step 9
     run_cmd "ping -I lte0 8.8.8.8 -c 3"
 
     if [ $? -ne 0 ]; then
-        # Step 7
-        model=$(cat /etc/datto/model)
-        if [ "$model" = "VZ5" ] || [ "$model" = "VZ6" ]; then
-            run_cmd "sequans-gpio-reset"
-        fi
+        # Step 10
+        run_cmd "/etc/init.d/dna-modemmanager stop"
 
-        # Step 8
-        run_cmd "modemreconnect"
+        # Step 11
+        echo "Running: pymm"
+        pymm &
+        sleep 60
+        kill $!
+        echo "pymm - Completed"
+        echo "----------------------------------------------------"
 
-        # Step 9
+        # Step 12
+        run_cmd "/etc/init.d/dna-modemmanager start"
+
+        # Step 13
         run_cmd "ping -I lte0 8.8.8.8 -c 3"
-
-        if [ $? -ne 0 ]; then
-            # Step 10
-            run_cmd "/etc/init.d/dna-modemmanager stop"
-
-            # Step 11
-            echo "Running: pymm"
-            pymm &
-            sleep 60
-            kill $!
-            echo "pymm - Completed"
-            echo "----------------------------------------------------"
-
-            # Step 12
-            run_cmd "/etc/init.d/dna-modemmanager start"
-
-            # Step 13
-            run_cmd "ping -I lte0 8.8.8.8 -c 3"
-        fi
     fi
 fi
